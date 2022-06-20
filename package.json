@@ -3,10 +3,10 @@
   "version": "1.1.0",
   "description": "",
   "main": "index.js",
-  "homepage": "https://RomaSamkov/project-filmoteka",
+  "homepage": "https://IvetaDuda/test-repo",
   "scripts": {
     "dev": "parcel src/*.html --open",
-    "build": "parcel build src/*.html --public-url /project-filmoteka/"
+    "build": "parcel build src/*.html --public-url /test-repo/"
   },
   "repository": {
     "type": "git",
