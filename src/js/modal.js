@@ -1,6 +1,7 @@
 import { refs } from './refs';
 import { userFilms } from './api';
 import { IMG_URL } from './api';
+import {renderWatchedMovies, renderQueueMovies} from './my-library/renderMyLibraryMovies';
 
 refs.closeModalBtn.addEventListener('click', oncloseModal);
 refs.backdrop.addEventListener('click', onClickBackdrop);
@@ -11,8 +12,10 @@ function onOpenModal(e) {
   if (e.target.nodeName !== 'IMG') {
     return;
   }
+  refs.modalContainer.innerHTML = '';
   refs.backdrop.classList.remove('is-hidden');
   window.addEventListener('keydown', onEscKeyPress);
+  refs.scrollOnModal.classList.toggle('scroll-blocked');
 
   userFilms.setId(e.target.dataset.id);
 
@@ -21,6 +24,7 @@ function onOpenModal(e) {
   const clickTrailerOverlay = document.querySelector('.overlay');
 
   function onOpenTrailer() {
+    window.addEventListener('keydown', onEscKeyPressTrailer);
     userFilms.onSearchTrailerById().then(videoData => {
       let key = '';
       videoData.results.map(video => {
@@ -52,81 +56,135 @@ function onOpenModal(e) {
 
   function onCloseTrailer() {
     document.getElementById('myNav').style.width = '0%';
+    contentTrailer.innerHTML = '';
+  }
+
+  function onEscKeyPressTrailer(e) {
+    if (e.code === 'Escape') {
+      document.getElementById('myNav').style.width = '0%';
+      contentTrailer.innerHTML = '';
+    }
   }
 
   userFilms.onSearchById().then(respons => {
-    const markup = renderSelectedFilm(respons);
-    refs.modalContainer.insertAdjacentHTML('afterbegin', markup);
-    refs.scrollOnModal.classList.toggle('scroll-blocked');
 
+    let textContentWatchedBtn = '';
+    let textContentQueueBtn = '';
+        
+    if (getMoviesIdFromWatchedStorage().includes(respons.id)){
+      textContentWatchedBtn = 'Remove from Watched';
+    }else {
+      textContentWatchedBtn = 'Add to Watched';
+    };
+
+    if (getMoviesIdFromQueueStorage().includes(respons.id)){
+      textContentQueueBtn = 'Remove from Queue'
+    }else{
+      textContentQueueBtn = 'Add to Queue'
+    };
+
+    const markup = renderSelectedFilm(respons, textContentWatchedBtn, textContentQueueBtn);
+    refs.modalContainer.insertAdjacentHTML('afterbegin', markup);
     const trailer = document.querySelector('.trailer');
     trailer.addEventListener('click', () => {
       onOpenTrailer();
     });
-
-    refs.modalContainer
-      .querySelector('.js-watched-btn')
-      .addEventListener('click', onWatchedBtnClick);
-    refs.modalContainer.querySelector('.js-queue-btn').addEventListener('click', onQueueBtnClick);
+    
+    const watchedBtn =  refs.modalContainer.querySelector('.js-modal-watched-btn');
+    watchedBtn.addEventListener('click', onWatchedBtnClick);
+    const queueBtn = refs.modalContainer.querySelector('.js-modal-queue-btn');
+    queueBtn.addEventListener('click', onQueueBtnClick);
 
     function onWatchedBtnClick() {
       const key = 'watched';
-      const watchedMovies = addToWatchedStorage();
-      const moviesId = watchedMovies.map(item => item.id);
+      const watchedMovies = getMoviesFromWatchedStorage();
+      const moviesId = getMoviesIdFromWatchedStorage();
 
-      if (moviesId.includes(respons.id)) return;
-      watchedMovies.push(respons);
-      localStorage.setItem(key, JSON.stringify(watchedMovies));
-    }
+      if (moviesId.includes(respons.id)) {
+          const removeMovie = watchedMovies.filter(movie => movie.id !== respons.id);
+          localStorage.setItem(key, JSON.stringify(removeMovie));
+          watchedBtn.textContent = 'Add to Watched';
+          console.log();
+          if(document.querySelector('.js-watched-btn.isActive')){
+            renderWatchedMovies();
+          }
+      }else {
+        watchedMovies.push(respons);
+        localStorage.setItem(key, JSON.stringify(watchedMovies));
+        watchedBtn.textContent = 'Remove from Watched';
+        if(document.querySelector('.js-watched-btn.isActive')){
+          renderWatchedMovies();
+        }
+      }
+    };
 
     function onQueueBtnClick() {
       const key = 'queue';
-      const queueMovies = addToQueueStorage();
-      const moviesId = queueMovies.map(item => item.id);
+      const queueMovies = getMoviesFromQueuetorage();
+      const moviesId = getMoviesIdFromQueueStorage();
 
-      if (moviesId.includes(respons.id)) return;
-      queueMovies.push(respons);
-      localStorage.setItem(key, JSON.stringify(queueMovies));
-    }
-    refs.scrollOnModal.classList.toggle('scroll-blocked');
+      if (moviesId.includes(respons.id)){
+        const removeMovie = queueMovies.filter(movie => movie.id !== respons.id);
+        localStorage.setItem(key, JSON.stringify(removeMovie));
+        queueBtn.textContent = 'Add to Queue';
+        if(document.querySelector('.js-queue-btn.isActive')){
+          renderQueueMovies();
+        }
+      }else{
+        queueMovies.push(respons);
+        localStorage.setItem(key, JSON.stringify(queueMovies));
+        queueBtn.textContent = 'Remove from Queue';
+        if(document.querySelector('.js-queue-btn.isActive')){
+          renderQueueMovies();
+        }
+      }
+    };
   });
-}
+};
 
-function addToWatchedStorage() {
+function getMoviesIdFromWatchedStorage(){
+  const watchedMovies = getMoviesFromWatchedStorage();
+  return watchedMovies.map(item => item.id);
+};
+function getMoviesIdFromQueueStorage(){
+  const queueMovies = getMoviesFromQueuetorage();
+  return queueMovies.map(item => item.id);
+};
+
+function getMoviesFromWatchedStorage() {
   const data = JSON.parse(localStorage.getItem('watched'));
   if (data) {
     return [...data];
   }
   return [];
-}
-function addToQueueStorage() {
+};
+function getMoviesFromQueuetorage() {
   const data = JSON.parse(localStorage.getItem('queue'));
   if (data) {
     return [...data];
   }
   return [];
-}
+};
 
 function oncloseModal() {
   window.removeEventListener('keydown', onEscKeyPress);
   refs.backdrop.classList.add('is-hidden');
-  refs.modalContainer.innerHTML = '';
   refs.scrollOnModal.classList.toggle('scroll-blocked');
-}
+};
 
 function onClickBackdrop(e) {
   if (e.currentTarget === e.target) {
     oncloseModal();
   }
-}
+};
 
 function onEscKeyPress(e) {
   if (e.code === 'Escape') {
     oncloseModal();
   }
-}
+};
 
-function renderSelectedFilm(film) {
+function renderSelectedFilm(film, textContentWatchedBtn, textContentQueueBtn) {
   const {
     original_title,
     poster_path,
@@ -140,6 +198,9 @@ function renderSelectedFilm(film) {
   return `
 <div class="modal-wrap">
   <div class="wrap-img">
+  <button class="trailer" id="${id}">
+      &#x25BA;
+    </button>
     <img
       data-id="${id}"
       src="${IMG_URL}${poster_path}"
@@ -157,7 +218,8 @@ function renderSelectedFilm(film) {
             <span class="item-name">Vote/Votes</span>
            <span class="item-value">
            <div class="item-activ-carrent">
-           <span class="selection-item">${vote_average}</span></div>/${vote_count}</span>
+           <span class="selection-item">${vote_average}</span></div> / <div class="item-activ-inactive">
+           <span class="selection-item">${vote_count}</span></div></span>
          </li>
          <li class="list-item">
            <span class="item-name">Popularity</span>
@@ -179,24 +241,10 @@ function renderSelectedFilm(film) {
       </div>
     </div>
     <div class="modal-button-list">
-      <button data-id="${id}" class="modal-button carrent-btn js-watched-btn">add to Watched</button>
-      <button data-id="${id}" class="modal-button js-queue-btn">add to queue</button>
+      <button data-id="${id}" class="modal-button js-modal-watched-btn">${textContentWatchedBtn}</button>
+      <button data-id="${id}" class="modal-button js-modal-queue-btn">${textContentQueueBtn}</button>
     </div>
-    <button class="trailer" id="${id}">
-      Trailer
-    </button>
-  </div>
+      </div>
 </div>
         `;
-}
-
-function onClickModalBtn(e) {
-  if (e.target.nodeName !== 'BUTTON') {
-    return;
-  }
-  const carrentBtn = document.querySelector('.carrent-btn');
-  if (carrentBtn) {
-    e.target.classList.remove('carrent-btn');
-  }
-  e.target.classList.toggle('carrent-btn');
 }

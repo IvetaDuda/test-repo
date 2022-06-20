@@ -26,15 +26,18 @@ const lightTheme = {
   modalInfoText: '#8c8c8c',
 };
 
-let currentTheme = 'light';
+const themeSwitch = document.querySelector('#theme-switch');
+
+themeSwitch.addEventListener('change', switchTheme);
 
 const element = document.documentElement;
 const backgroundColorList = document.querySelector('.section');
-const headerContainer = document.querySelector('.header');
 const footerContainer = document.querySelector('.footer');
 
-function switchTheme() {
-  if (currentTheme === 'light') {
+function checkedThem() {
+  const currentTheme = localStorage.getItem('theme');
+  console.log(currentTheme);
+  if (currentTheme === 'dark') {
     element.style.setProperty('--accent-color', darkTheme.accent);
     element.style.setProperty('--primari-white-color', darkTheme.main);
     element.style.setProperty('--primary-text-color', darkTheme.textColor);
@@ -42,15 +45,11 @@ function switchTheme() {
     element.style.setProperty('--footer-background-color', darkTheme.footerBgd);
     element.style.setProperty('--footer-text-color', darkTheme.footerText);
     element.style.setProperty('--bgd-dark-color', darkTheme.bgr);
-    element.style.setProperty('--text-modal-color', darkTheme.modalText);
-    element.style.setProperty('--bgd-modal-color', darkTheme.modalBgd);
-    element.style.setProperty('--information-modal-text-color', darkTheme.modalInfoText);
 
     backgroundColorList.classList.add('section--bgd');
-    headerContainer.classList.add('header--shadow');
     footerContainer.classList.add('footer--shadow');
 
-    currentTheme = 'dark';
+    themeSwitch.checked = true;
   } else {
     element.style.setProperty('--accent-color', lightTheme.accent);
     element.style.setProperty('--primari-white-color', lightTheme.main);
@@ -59,18 +58,25 @@ function switchTheme() {
     element.style.setProperty('--footer-background-color', lightTheme.footerBgd);
     element.style.setProperty('--footer-text-color', lightTheme.footerText);
     element.style.setProperty('--bgd-dark-color', lightTheme.bgr);
-    element.style.setProperty('--text-modal-color', lightTheme.modalText);
-    element.style.setProperty('--bgd-modal-color', lightTheme.modalBgd);
-    element.style.setProperty('--information-modal-text-color', lightTheme.modalInfoText);
 
     backgroundColorList.classList.remove('section--bgd');
-    headerContainer.classList.remove('header--shadow');
     footerContainer.classList.remove('footer--shadow');
 
-    currentTheme = 'light';
+    themeSwitch.checked = false;
   }
 }
+function switchTheme(event) {
+  console.dir(event.target.checked);
+  const check = event.target.checked;
+  console.log(check);
+  if (check) {
+    localStorage.setItem('theme', 'dark');
+  } else {
+    localStorage.setItem('theme', 'light');
+  }
+  checkedThem();
+}
 
-const themeSwitch = document.querySelector('#theme-switch');
+checkedThem();
 
-themeSwitch.addEventListener('change', switchTheme);
+export { checkedThem, switchTheme };

@@ -16,37 +16,72 @@ img {
   padding: 0;
 }
 
-.film__image {
-  border-radius: 5px;
-  width: 208px;
-  height: 402px;
-  @media screen and (min-width: 768px) {
+.film__image{
+    border-radius: 5px;
+    width: 280px;
+    height: 402px;
+    margin-bottom: 10px;  
+    box-shadow: 2px 4px 8px 1px rgb(105, 104, 104, 0.5), 2px 4px 8px 3px rgb(255, 107, 8, 0.6); 
+    transition-property: transform;
+    transition-duration: 250ms;
+  
+    @media screen and (min-width: 768px) {
     width: 336px;
     height: 455px;
-  }
-  @media screen and (min-width: 1024px) {
+    margin-bottom: 8px;
+    } 
+    @media screen and (min-width: 1024px) {
     width: 309px;
     height: 449px;
+    }       
+
+    &:hover,
+    &:focus {
+    transform: scale(1.035);
   }
 }
 
 .film__list {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-
-  margin-bottom: 60px;
+  margin-left: -16px;
+  
 }
 
-.filmCard__wrap {
-  margin-right: 16px;
-}
+
+
+.filmCard__wrap{
+   margin-bottom: 32px;
+      
+      @media screen and (min-width: 768px) {
+      flex-basis: calc(100% / 2 - 16px);
+      margin-left: 32px;
+      &:nth-child(odd){
+        margin-left: 0;
+      }
+      }
+
+     @media screen and (min-width: 1024px) {
+     flex-basis: calc(100% / 3 - 11px);
+     margin-left: 16px;
+      &:nth-child(odd){
+        margin-left: 16px;
+      }
+      &:nth-child(3n+1){
+        margin-left: 0px;
+      }
+     } 
+}  
+
+
 
 .info {
-  width: 208px;
+  width: 280px;
+
   @media screen and (min-width: 768px) {
     width: 336px;
   }
+
   @media screen and (min-width: 1024px) {
     width: 309px;
   }
@@ -59,7 +94,6 @@ img {
   font-size: 12px;
   line-height: 16px;
   text-transform: uppercase;
-
   color: var(--secondary-text-color);
 }
 
@@ -86,6 +120,19 @@ img {
   margin-bottom: 0;
 }
 
+.info__voteAverage {
+    height: 16px;
+    width: 36px;
+    display: flex;
+    justify-content: center;
+    border-radius: 5px;
+    background-color: #FF6B08;
+}
+
+.info_voteValue {
+    color: #ffffff;
+}
+
 .stick {
   width: 1.5px;
   height: 10px;
@@ -104,7 +151,6 @@ img {
   align-items: center;
   width: 3rem;
   height: 3rem;
-
   font-weight: 500;
   font-size: 12px;
   line-height: calc(16 / 12);

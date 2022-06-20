@@ -9,6 +9,7 @@ ul {
   margin-top: 0px;
   margin-bottom: 0px;
 }
+
 .list {
   list-style: none;
   margin: 0;
@@ -23,15 +24,12 @@ ul {
 .uppercase {
   text-transform: uppercase;
 }
-.is-hidden > .modal-up {
-  transform: translate(-50%, -50%) scale(0.9);
-}
 
 .scroll-blocked {
   overflow: hidden;
 }
 
-.modal-backdrop {
+.modal-backdrop, .modalLogin-backdrop  {
   z-index: 999;
   position: fixed;
   width: 100%;
@@ -39,9 +37,10 @@ ul {
   top: 0;
   left: 0;
   background-color: rgba(0, 0, 0, 0.1);
-  transition: opacity 250ms, visibility 250ms;
+  transition: opacity 350ms;
 }
-.modal-closeButton {
+
+.modal-closeButton, .js-loginModal-closeButton {
   background-color: transparent;
   border: none;
   padding: 0;
@@ -56,6 +55,69 @@ ul {
   justify-content: center;
 }
 
+//-------------на логін/реєстрацію-----------
+.loginForm {
+  margin: 0;
+  padding-top: 0;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.registerFormInput {
+  margin: 0 0;
+  padding-left: 10px;
+  display: block;
+  width: 95%;
+  height: 40px;
+  border: 1px solid rgba(33, 33, 33, 0.2);
+  border-radius: 4px;
+  outline: none;
+}
+
+.regFormButton{
+margin-top: 15px;
+}
+
+.registerFormInput:focus {
+  border-color: #f38721;
+}
+.registerForm {
+  margin: 0;
+  padding-top: 0;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.registerFormUnit {
+  position: relative;
+  display: block;
+}
+
+.registerModalText {
+  margin: 0;
+  padding-top: 57px;
+  padding-bottom: 6px;
+  text-align: center;
+  font-family:"Roboto", sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.5;
+  letter-spacing: 0.03em;
+  color: #000000;
+}
+
+.registerFormText {
+  display: block;
+  padding-top: 20px;
+  padding-bottom: 4px;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  color: #757575;
+}
+
 .modal-up {
   width: calc(100% - 40px);
   max-width: 450px;
@@ -68,7 +130,7 @@ ul {
   transform: translate(-50%, -50%) scale(1);
   padding: 48px 20px 40px 20px;
   overflow-y: scroll;
-  transition: linear 0.7s;
+  
 
   @media screen and (min-width: 767px) {
     max-width: none;
@@ -78,7 +140,7 @@ ul {
     height: auto;
   }
 
-  @media screen and (min-width: 1023px) {
+  @media screen and (min-width: 1024px) {
     width: 814px;
     padding: 50px 30px 40px 30px;
   }
@@ -98,7 +160,7 @@ ul {
     justify-content: flex-end;
   }
 
-  @media screen and (min-width: 1023px) {
+  @media screen and (min-width: 1024px) {
     justify-content: flex-start;
     align-self: start;
     grid-column: 2/3;
@@ -120,11 +182,19 @@ ul {
   background-color: white;
   cursor: pointer;
 
+  &:hover,
+  &:focus {
+    border: 1px solid var(--accent-color);
+    background-color: var(--accent-color);
+    color: var(--primari-white-color);
+    filter: drop-shadow(0px 8px 43px rgba(255, 107, 1, 0.6));
+  }
+
   @media screen and (min-width: 767px) {
     width: 125px;
   }
 
-  @media screen and (min-width: 1023px) {
+  @media screen and (min-width: 1024px) {
     width: 136px;
   }
 }
@@ -132,6 +202,7 @@ ul {
 .modal-button:first-child {
   margin-right: 15px;
 }
+
 .modal-image {
   display: block;
   justify-content: center;
@@ -148,6 +219,7 @@ ul {
 
 .modal-wrap {
   display: flex;
+
   @media screen and (max-width: 767px) {
     flex-direction: column;
     align-items: center;
@@ -157,14 +229,18 @@ ul {
 
 .box-info {
   width: 240px;
+
   @media screen and (min-width: 767px) {
     width: 264px;
   }
-  @media screen and (min-width: 1023px) {
+
+  @media screen and (min-width: 1024px) {
     width: 391px;
   }
 }
+
 .wrap-img {
+  position: relative;
   margin-bottom: 20px;
   height: 357px;
   width: 240px;
@@ -175,18 +251,21 @@ ul {
     margin-bottom: 0px;
     margin-right: 68px;
   }
-  @media screen and (min-width: 1023px) {
+
+  @media screen and (min-width: 1024px) {
     height: 478px;
     width: 375px;
     margin-right: 16px;
   }
 }
+
 .wrap-img > img {
   display: block;
   height: 100%;
   width: 100%;
   object-fit: cover;
 }
+
 .modal-box-list {
   display: flex;
 }
@@ -194,6 +273,7 @@ ul {
 .list-value {
   margin-left: 40px;
 }
+
 .modal-description {
   font-weight: 500;
   font-size: 12px;
@@ -204,16 +284,19 @@ ul {
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
+
 .item-name {
   margin-right: 40px;
   font-weight: 500;
   font-size: 12px;
   line-height: 1.33;
   color: #8c8c8c;
-  @media screen and (min-width: 1023px) {
+
+  @media screen and (min-width: 1024px) {
     margin-right: 85px;
   }
 }
+
 .item-value {
   font-weight: 500;
   font-size: 12px;
@@ -228,14 +311,17 @@ ul {
   font-weight: 500;
   font-size: 20px;
   line-height: 1, 15;
-  @media screen and (min-width: 1023px) {
+
+  @media screen and (min-width: 1024px) {
     font-size: 30px;
     line-height: 1, 16;
   }
 }
-.list > li:not(:last-child) {
+
+.list-item:not(:last-child) {
   margin-bottom: 8px;
 }
+
 .list-name > li {
   white-space: nowrap;
 }
@@ -248,6 +334,16 @@ ul {
   border-radius: 5px;
   background-color: var(--accent-color);
   color: white;
+}
+
+.item-activ-inactive {
+  display: inline-block;
+  text-align: center;
+  width: 36px;
+  height: 16px;
+  border-radius: 5px;
+  background-color: #F7F7F7;
+  
 }
 
 .title-about {
@@ -263,8 +359,24 @@ ul {
   font-size: 12px;
   line-height: 1.66;
 }
-.carrent-btn {
-  background-color: var(--accent-color);
-  color: white;
-  border-color: transparent;
+
+.trailer {
+  padding: 3px 10px;
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  background-color: rgb(242, 17, 17);
+  border-color: rgb(242, 17, 17);
+  color: rgb(240, 243, 240);
+  border-radius: 7px;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    border: 1px solid rgb(242, 17, 17);
+    border-color: rgba(242, 17, 17, 0.3);
+    background-color: rgba(242, 17, 17, 0.3);
+    color: var(--primari-white-color);
+    filter: drop-shadow(0px 8px 43px rgba(242, 17, 17, 0.9));
+  }
 }

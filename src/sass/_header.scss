@@ -11,7 +11,6 @@ body {
 
 .header {
   background-color: var(--header-background-color);
-  padding: 44px 20px 20px 20px;
 
   background-image: linear-gradient(rgba(0, 0, 0, 0.56), rgba(0, 0, 0, 0.4)),
     url(../images/Rectangle-1.jpg);
@@ -24,7 +23,6 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    padding: 40px 32px 20px 32px;
   }
   @media screen and (min-width: 1024px) {
     background-image: linear-gradient(rgba(0, 0, 0, 0.56), rgba(0, 0, 0, 0.4)),
@@ -35,8 +33,11 @@ body {
   }
 }
 .header__container {
-  padding-bottom: 60px;
+  padding: 44px 20px 60px 20px;
   position: relative;
+  @media screen and (min-width: 768px) {
+    padding: 40px 32px 60px 32px;
+  }
 }
 .header__navigation {
   display: flex;
@@ -92,21 +93,24 @@ body {
 }
 .header__form {
   position: relative;
-  width: 280px;
+  width: 200px;
   height: 20px;
-  margin: 51px auto 0 auto;
+  margin: 51px auto 20px auto;
   border-bottom: 0.5px solid var(--header-text-color);
   @media screen and (min-width: 768px) {
-    margin: 41px auto 0 auto;
+    margin: 41px auto 20px auto;
     width: 330px;
   }
 }
 .header__input {
-  width: 250px;
+  width: 150px;
   border: none;
   background-color: transparent;
   color: var(--header-text-color);
   outline: none;
+  @media screen and (min-width: 768px) {
+    width: 250px;
+  }
 }
 .form__btn {
   position: absolute;
@@ -128,10 +132,4 @@ body {
 .header__input:-ms-input-placeholder {
   @include font(14px, 400, 1.14, 0.03em);
   color: var(--header-text-color);
-}
-
-.dark {
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
 }
