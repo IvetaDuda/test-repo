@@ -125,6 +125,7 @@
   position: relative;
 }
 .regChangeBtn,
+.logChangeBtn,
 .logChangeBtn {
   position: absolute;
   top: 11px;
@@ -133,10 +134,16 @@
   width: 20px;
   height: 20px;
   border-color: transparent;
+  background-color: transparent;
 }
-.openEye {
-  background: url(http://zornet.ru/ZORNET-RU/ZR/Alinuversa/amipsakilad/dsareqab.svg) 0 0 no-repeat;
+
+.changeEyes {
+  display: none;
 }
-.closedEye {
-  background: url(http://zornet.ru/ZORNET-RU/ZR/Alinuversa/amipsakilad/dsamudulas.svg) 0 0 no-repeat;
+
+.eyeCange {
+  position: absolute;
+  top: 0px;
+  right: 4px;
+  fill: #545454;
 }
